@@ -39,8 +39,8 @@ BorgBackup pulls backups from a remote machine.
 ## Scheduling daily backups
 
 We use systemd-timers for scheduling daily backups, since they will trigger
-backups even if the clients misses the scheduled time (e.g., since it is shut down or in 
-hibernation).
+backups even if the clients misses the scheduled time (e.g., due to a shut down, 
+network outage or hibernation).
 
  1. copy the backup scripts to `/usr/local/bin`.
  2. copy the systemd files from the repository to `/etc/systemd/system`
