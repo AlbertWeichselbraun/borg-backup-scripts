@@ -1,6 +1,10 @@
 # BorgBackup scripts for push and pull backups
 
-## BorgBackup pull backups
+ 1. [BorgBackup push backups](borgbackup-push-backups) ... Backups that are triggered by the client
+ 2. [BorgBackup pull backups](borgbackup-pull-backups) ... Triggering backups from the backup server
+ 3. [Scheduling daily backups](scheduling-daily-backups) ... Scheduling daily backups that even work across reboots
+
+## BorgBackup push backups
 
 BorgBackup push backups are initiated by the client which pushes the backup to the given REPOSITORY.
 
@@ -24,9 +28,29 @@ Examples:
        push-backup.sh /backup/myborg-repo /etc/borg/client-full.cfg
 ```
 
-## BorgBackup push backups
+## BorgBackup pull backups
 
 BorgBackup pulls backups from a remote machine.
 
 ### Requirements:
 - BorgBackup and `socat` must be installed on both machines
+
+
+## Scheduling daily backups
+
+We use systemd-timers for scheduling daily backups, since they will trigger
+backups even if the clients misses the scheduled time (e.g., since it is shut down or in 
+hibernation).
+
+ 1. copy the backup scripts to `/usr/local/bin`.
+ 2. copy the systemd files from the repository to `/etc/systemd/system`
+ 3. reload the systemd configuration and activate the time:
+    ```bash
+    sudo systemctl enable borgbackup.timer
+    sudo systemctl start borgbackup.timer
+    ```
+ 4. verify that the timer has been started
+    ```bash
+    sudo systemctl list-timers
+    ```
+
