@@ -57,3 +57,7 @@ network outage or hibernation).
     sudo systemctl list-timers
     ```
 
+## Resources
+- [BorgBackup](https://www.borgbackup.org/)
+- [Setting up scheduled Borg Backups with systemd-timers](https://dextervolkman.com/posts/borg_backups/)
+- [archlinux Wiki on systemd/Timers](https://wiki.archlinux.org/index.php/Systemd/Timers)
