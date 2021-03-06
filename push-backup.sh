@@ -4,14 +4,20 @@
 # author: Albert Weichselbraun
 
 if [ "$#" -lt 2 ]; then
-    echo "Usage: $(basename $0) REPOSITORY EXCLUDE_PATTERN [EXCLUDE_PATTERN] ..."
+    PROG=$(basename "$0")
+    echo "Usage: $PROG REPOSITORY EXCLUDE_PATTERN [EXCLUDE_PATTERN] ..."
     echo 
     echo "  REPOSITORY       the local or remote repository path"
     echo "  EXCLUDE_PATTERN  name of the exclude pattern(s) to use"
     echo 
     echo "Examples:"
-    echo "  $(basename $0) ssh://server.org/backup/borg /etc/borg/client-full.cfg /etc/borg/client-data.cfg"
-    echo "  $(basename $0) /backup/myborg-repo /etc/borg/client-full.cfg"
+    echo "  1. Push a backup to the repository on 'server.org' applying the 'client-full'"
+    echo "     and 'client-data' exclude patterns."
+    echo "        $PROG backup-user@server.org:/backup/borg \\"
+    echo "              /etc/borg/client-full.cfg /etc/borg/client-data.cfg"
+    echo
+    echo "  2. Push a backup to a local repository using the 'client-full' exclude patterns."
+    echo "        $PROG /backup/myborg-repo /etc/borg/client-full.cfg"
     exit 0
 fi
 

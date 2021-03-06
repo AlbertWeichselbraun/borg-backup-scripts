@@ -15,11 +15,18 @@ Usage: push-backup.sh REPOSITORY EXCLUDE_PATTERN [EXCLUDE_PATTERN] ...
   EXCLUDE_PATTERN  name of the exclude pattern(s) to use
 
 Examples:
-  push-backup.sh ssh://server.org/backup/borg /etc/borg/client-full.cfg /etc/borg/client-data.cfg
-  push-backup.sh /backup/myborg-repo /etc/borg/client-full.cfg
+  1. Push a backup to the repository on `server.org` applying the `client-full`
+     and `client-data` exclude patterns.
+       push-backup.sh backup-user@server.org:/backup/borg \
+           /etc/borg/client-full.cfg /etc/borg/client-data.cfg
+
+  2. Push a backup to a local repository using the `client-full` exclude patterns.
+       push-backup.sh /backup/myborg-repo /etc/borg/client-full.cfg
 ```
 
 ## BorgBackup push backups
 
 BorgBackup pulls backups from a remote machine.
 
+### Requirements:
+- BorgBackup and `socat` must be installed on both machines
