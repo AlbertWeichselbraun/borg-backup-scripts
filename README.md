@@ -1,8 +1,9 @@
 # BorgBackup scripts for push and pull backups
 
- 1. [BorgBackup push backups](borgbackup-push-backups) ... Backups that are triggered by the client
- 2. [BorgBackup pull backups](borgbackup-pull-backups) ... Triggering backups from the backup server
- 3. [Scheduling daily backups](scheduling-daily-backups) ... Scheduling daily backups that even work across reboots
+**Contents:**
+ 1. [Push backups](#borgbackup-push-backups) ... Backups that are triggered by the client
+ 2. [Pull backups](#borgbackup-pull-backups) ... Triggering backups from the backup server
+ 3. [Automatic backups](#scheduling-daily-backups) ... Scheduling daily backups that even work across reboots
 
 ## BorgBackup push backups
 
