@@ -48,6 +48,7 @@ network outage or hibernation).
  3. adapt the backup command in `/etc/systemd/system/borgbackup.service`
  4. reload the systemd configuration and activate the time:
     ```bash
+    sudo systemctl daemon-reload
     sudo systemctl enable borgbackup.timer
     sudo systemctl start borgbackup.timer
     ```
