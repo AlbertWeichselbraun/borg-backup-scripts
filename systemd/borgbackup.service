@@ -18,4 +18,4 @@ Restart=no
 
 LogRateLimitIntervalSec=0
 
-ExecStart=systemd-inhibit --who="BorgBbackup" --why="Please let me complete the backup first." /usr/local/bin/push-backup.sh --syslog-verbosity 1
+ExecStart=systemd-inhibit --who="BorgBbackup" --why="Please let me complete the backup first." /usr/local/bin/push-backup.sh user@hostname:/repoitory-path /etc/borg/exclude-files.cfg
