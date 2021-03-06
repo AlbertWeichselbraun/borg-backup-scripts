@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # borgbackup local backup script
 # author: Albert Weichselbraun
@@ -25,19 +25,19 @@ BORG_OPTS="--stats --compression zstd,9 --exclude-caches --noatime --progress"
 BORG_REPOSITORY=$1
 HOST=$(hostname -f)
 DATE=$(date --iso-8601)
+BORG_EXCLUDE_FILE=$(mktemp /tmp/.borg-exclude-XXXXXXXXXX.tmp)
 
-# compute BORG_EXCLUDE
 shift
 for exclude_profile do
     if [ ! -f "$exclude_profile" ]; then
         echo "Cannot find exclude file at $exclude_profile"
         exit 1
     fi
-    BORG_EXCLUDE="$BORG_EXCLUDE --exclude-file $exclude_profile"
+    cat "$exclude_profile" >> "$BORG_EXCLUDE_FILE"
 done;
 
 echo "Creating backup $HOST.$DATE."
-borg create "$BORG_OPTS"  \
+echo borg create "$BORG_OPTS"  \
    --exclude pp:/dev \
    --exclude pp:/lost+found \
    --exclude pp:/media \
@@ -58,5 +58,7 @@ borg create "$BORG_OPTS"  \
    --exclude pp:/var/log \
    --exclude pp:/var/snap \
    --exclude pp:/var/tmp \
-   "$BORG_EXCLUDE" \
+   --exclude-from "$BORG_EXCLUDE_FILE" \
    "$BORG_REPOSITORY::$HOST.$DATE" /
+
+rm -f "$BORG_EXCLUDE_FILE"
