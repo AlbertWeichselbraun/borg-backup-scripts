@@ -37,7 +37,7 @@ for exclude_profile do
 done;
 
 echo "Creating backup $HOST.$DATE."
-echo borg create "$BORG_OPTS"  \
+borg create ${BORG_OPTS}  \
    --exclude pp:/dev \
    --exclude pp:/lost+found \
    --exclude pp:/media \
@@ -59,6 +59,11 @@ echo borg create "$BORG_OPTS"  \
    --exclude pp:/var/snap \
    --exclude pp:/var/tmp \
    --exclude-from "$BORG_EXCLUDE_FILE" \
-   "$BORG_REPOSITORY::$HOST.$DATE" /
+   "$BORG_REPOSITORY::$HOST.$DATE" \
+   /etc \
+   /home \
+   /root \
+   /var \
+   /usr/local
 
 rm -f "$BORG_EXCLUDE_FILE"
