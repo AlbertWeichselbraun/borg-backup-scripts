@@ -1,7 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
-# borgbackup local backup script
+#
+# Perform a push backup of the local host with borgbackup
 # author: Albert Weichselbraun
+#
 
 PROG=$(basename "$0")
 
@@ -35,7 +37,6 @@ BORG_REPOSITORY=$1
 shift
 HOST=$(hostname -f)
 DATE=$(date --iso-8601)
-BORG_EXCLUDE_FILE=$(mktemp /tmp/.borg-exclude-XXXXXXXXXX.tmp)
 
 # create exclude file
 while getopts x: opt 
@@ -45,7 +46,10 @@ do
           echo "Cannot find exclude file at $OPTARG"
           exit 1
        fi
-       cat "$OPTARG" >> "$BORG_EXCLUDE_FILE"
+
+       while read -r pattern; do
+          exclude=$exclude"--exclude \"$pattern\" "
+       done < <(sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$OPTARG")
        ;;
     ?) help
        ;;
@@ -57,7 +61,7 @@ echo "Creating backup $HOST.$DATE."
 borg create ${BORG_OPTS}  \
    --exclude pp:/dev \
    --exclude pp:/lost+found \
-   --exclude pp:/media \
+   --exclude pp:/media\
    --exclude pp:/mnt \
    --exclude pp:/proc \
    --exclude pp:/run \
@@ -66,17 +70,16 @@ borg create ${BORG_OPTS}  \
    --exclude pp:/tmp \
    --exclude pp:/var/cache \
    --exclude pp:/var/crash \
+   --exclude pp:/var/lib/apt \
    --exclude pp:/var/lib/docker \
    --exclude pp:/var/lib/flatpak \
    --exclude pp:/var/lib/snapd \
-   --exclude pp:/var/lib/apt \
    --exclude pp:/var/lock \
-   --exclude pp:/var/run \
    --exclude pp:/var/log \
+   --exclude pp:/var/run \
    --exclude pp:/var/snap \
    --exclude pp:/var/tmp \
-   --exclude-from "$BORG_EXCLUDE_FILE" \
-   "$BORG_REPOSITORY::$HOST.$DATE" \
+   $exclude "$BORG_REPOSITORY::$HOST.$DATE" \
    $*
 
 rm -f "$BORG_EXCLUDE_FILE"
