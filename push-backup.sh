@@ -3,38 +3,55 @@
 # borgbackup local backup script
 # author: Albert Weichselbraun
 
-if [ "$#" -lt 2 ]; then
-    PROG=$(basename "$0")
-    echo "Usage: $PROG REPOSITORY EXCLUDE_PATTERN [EXCLUDE_PATTERN] ..."
+PROG=$(basename "$0")
+
+help() {
+    echo "Usage: $PROG REPOSITORY [-x EXCLUDE_PATTERN_FILE] PATH"
     echo 
-    echo "  REPOSITORY       the local or remote repository path"
-    echo "  EXCLUDE_PATTERN  name of the exclude pattern(s) to use"
+    echo "  REPOSITORY            the local or remote repository path"
+    echo "  EXCLUDE_PATTERN_FILE  optional files containing exclude pattern(s) to apply"
+    echo "  PATH                  paths to backup"
     echo 
     echo "Examples:"
-    echo "  1. Push a backup to the repository on 'server.org' applying the 'client-full'"
-    echo "     and 'client-data' exclude patterns."
+    echo "  1. Push a backup of '/etc', '/home', '/root', '/usr/local' and"
+    echo "     '/var' to the repository on 'server.org' applying the"
+    echo "     'client-full' and 'client-data' exclude patterns:"
     echo "        $PROG backup-user@server.org:/backup/borg \\"
-    echo "              /etc/borg/client-full.cfg /etc/borg/client-data.cfg"
+    echo "              -x /etc/borg/client-full.cfg -x /etc/borg/client-data.cfg \\"
+    echo "              /etc /home /root /usr/local /var"
     echo
-    echo "  2. Push a backup to a local repository using the 'client-full' exclude patterns."
-    echo "        $PROG /backup/myborg-repo /etc/borg/client-full.cfg"
+    echo "  2. Push a backup of '/' to a local repository using the"
+    echo "     'client-full' exclude patterns:"
+    echo "        $PROG /backup/myborg-repo -x /etc/borg/client-full.cfg /"
     exit 0
+}
+
+if [ "$#" -lt 2 ]; then
+    help
 fi
 
 BORG_OPTS="--stats --compression zstd,9 --exclude-caches --noatime --progress"
 BORG_REPOSITORY=$1
+shift
 HOST=$(hostname -f)
 DATE=$(date --iso-8601)
 BORG_EXCLUDE_FILE=$(mktemp /tmp/.borg-exclude-XXXXXXXXXX.tmp)
 
-shift
-for exclude_profile do
-    if [ ! -f "$exclude_profile" ]; then
-        echo "Cannot find exclude file at $exclude_profile"
-        exit 1
-    fi
-    cat "$exclude_profile" >> "$BORG_EXCLUDE_FILE"
+# create exclude file
+while getopts x: opt 
+do
+    case $opt in
+    x) if [ ! -f "$OPTARG" ]; then
+          echo "Cannot find exclude file at $OPTARG"
+          exit 1
+       fi
+       cat "$OPTARG" >> "$BORG_EXCLUDE_FILE"
+       ;;
+    ?) help
+       ;;
+    esac
 done;
+shift $((OPTIND-1))
 
 echo "Creating backup $HOST.$DATE."
 borg create ${BORG_OPTS}  \
@@ -60,10 +77,6 @@ borg create ${BORG_OPTS}  \
    --exclude pp:/var/tmp \
    --exclude-from "$BORG_EXCLUDE_FILE" \
    "$BORG_REPOSITORY::$HOST.$DATE" \
-   /etc \
-   /home \
-   /root \
-   /var \
-   /usr/local
+   $*
 
 rm -f "$BORG_EXCLUDE_FILE"
