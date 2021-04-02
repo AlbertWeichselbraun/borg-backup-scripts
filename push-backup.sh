@@ -49,7 +49,7 @@ do
        fi
 
        while read -r pattern; do
-          exclude+=("--exclude \"$pattern\"")
+          exclude+=("--exclude $pattern")
        done < <(sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$OPTARG")
        ;;
     ?) help
@@ -80,4 +80,4 @@ borg create ${BORG_OPTS}  \
    --exclude pp:/var/run \
    --exclude pp:/var/snap \
    --exclude pp:/var/tmp \
-   ${exclude[@]} "$BORG_REPOSITORY::$HOST.$DATE" $*
+   ${exclude[@]} $BORG_REPOSITORY::$HOST.$DATE $*
