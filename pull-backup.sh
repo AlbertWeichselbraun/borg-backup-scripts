@@ -31,6 +31,11 @@ help() {
     exit 0
 }
 
+if [ "$#" -lt 3 ]; then
+    help
+fi
+
+
 BORG_OPTS="--stats --compression zstd,9 --exclude-caches --noatime --progress"
 HOST=$1
 BORG_REPOSITORY=$2

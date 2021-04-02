@@ -32,11 +32,34 @@ Examples:
 
 ## BorgBackup pull backups
 
-BorgBackup pulls backups from a remote machine.
+Pull backups are initiated by the backup server rather than the client. 
 
 ### Requirements:
 - BorgBackup and `socat` must be installed on both machines
 
+### Usage:
+```
+Usage: pull-backup.sh [USER@]HOST REPOSITORY [-x EXCLUDE_PATTERN_FILE] PATH
+
+  [USER@]HOST           host and optional username of the host to backup
+  REPOSITORY            the local or remote repository path
+  EXCLUDE_PATTERN_FILE  optional files containing exclude pattern(s) to apply
+  PATH                  paths to backup
+
+Examples:
+  1. Pull a backup of '/etc', '/home', '/root', '/usr/local' and
+     '/var' from 'root@server.org' to the local repository applying
+     the 'client-full' and 'client-data' exclude patterns:
+        pull-backup.sh /backup/myborg-repo root@server.org\
+              -x /etc/borg/client-full.cfg \
+              -x /etc/borg/client-data.cfg \
+              /etc /home /root /usr/local /var
+
+  2. Pull a backup of '/' from 'root@server.org' to a local
+     repository using the 'client-full' exclude patterns:
+        pull-backup.sh /backup/myborg-repo root@server.org \
+              -x /etc/borg/client-full.cfg /
+```
 
 ## Scheduling daily backups
 
