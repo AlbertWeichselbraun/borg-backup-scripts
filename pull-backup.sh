@@ -43,8 +43,8 @@ shift 2
 BORG_SOCKET=/root/.borg-$(uuidgen --random).sock
 DATE=$(date --iso-8601)
 
-# determine exclude files
-exclude=""
+# create exclude parameter
+exclude=()
 while getopts x: opt 
 do
     case $opt in
@@ -54,7 +54,7 @@ do
        fi
 
        while read -r pattern; do
-          exclude=$exclude"--exclude \"$pattern\" "
+          exclude+=("--exclude \"$pattern\"")
        done < <(sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$OPTARG")
        ;;
     ?) help
@@ -68,6 +68,7 @@ killall -q socat
 socat UNIX-LISTEN:"$BORG_SOCKET",fork EXEC:"/usr/bin/borg serve --append-only --restrict-to-path $BORG_REPOSITORY" &
 echo "Waiting until the socket becomes available..."
 while [ ! -S "$BORG_SOCKET" ]; do sleep 1; done
+
 
 echo "Connecting the local socket to the remote host"
 ssh -R "$BORG_SOCKET":"$BORG_SOCKET" "$HOST" \
@@ -92,7 +93,7 @@ ssh -R "$BORG_SOCKET":"$BORG_SOCKET" "$HOST" \
       --exclude pp:/var/log \
       --exclude pp:/var/snap \
       --exclude pp:/var/tmp \
-       $exclude ssh://hc$BORG_REPOSITORY::$HOST.$DATE $* ';' \ 
+       ${exclude[@]} ssh://hc$BORG_REPOSITORY::$HOST.$DATE $* ';' \ 
    rm -f "$BORG_SOCKET"
 
 killall socat
