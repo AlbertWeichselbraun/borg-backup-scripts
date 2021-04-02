@@ -9,27 +9,24 @@
 
 BorgBackup push backups are initiated by the client which pushes the backup to the given REPOSITORY.
 
-The script backups the whole file system with the 
-exception of the patterns excluded in the `EXCLUDE_PATTERN_FILES` (please refer to `man borg-pattners` for a
-specification of the exclude patterns supported by borg.
+The script backups the specified paths with the exception of patterns excluded in the `EXCLUDE_PATTERN_FILES` (please refer to `man borg-pattners` for a
+specification of the exclude patterns supported by borg).
 
-```bash
-Usage: push-backup.sh REPOSITORY EXCLUDE_PATTERN [EXCLUDE_PATTERN] ...
+```
+Usage: push-backup.sh REPOSITORY [-x EXCLUDE_PATTERN] PATH
 
-  REPOSITORY       the local or remote repository path
+  REPOSITORY            the local or remote repository path
   EXCLUDE_PATTERN_FILE  optional files containing exclude pattern(s) to apply"
   PATH                  paths to backup"
 
 Examples:
-  1. Push a backup `/etc`, `/home`, `/root`, `/usr/local` and 
-     `/var` to the repository on `server.org` applying the 
-     `client-full` and `client-data` exclude patterns:
+  1. Push a backup `/etc`, `/home`, `/root`, `/usr/local` and `/var` to the repository on `server.org` 
+     applying the `client-full` and `client-data` exclude patterns:
        push-backup.sh backup-user@server.org:/backup/borg \
            -x /etc/borg/client-full.cfg -x /etc/borg/client-data.cfg \
            /etc /home /root /usr/local /var
 
-  2. Push a backup of `/` to a local repository using the 
-     `client-full` exclude patterns:
+  2. Push a backup of `/` to a local repository using the `client-full` exclude patterns:
        push-backup.sh /backup/myborg-repo -x /etc/borg/client-full.cfg /
 ```
 
