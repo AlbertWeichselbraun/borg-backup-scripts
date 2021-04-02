@@ -16,16 +16,18 @@ help() {
     echo "  PATH                  paths to backup"
     echo 
     echo "Examples:"
-    echo "  1. Push a backup of '/etc', '/home', '/root', '/usr/local' and"
-    echo "     '/var' to the repository on 'server.org' applying the"
-    echo "     'client-full' and 'client-data' exclude patterns:"
-    echo "        $PROG backup-user@server.org:/backup/borg \\"
-    echo "              -x /etc/borg/client-full.cfg -x /etc/borg/client-data.cfg \\"
+    echo "  1. Pull a backup of '/etc', '/home', '/root', '/usr/local' and"
+    echo "     '/var' from 'root@server.org' to the local repository applying"
+    echo "     the 'client-full' and 'client-data' exclude patterns:"
+    echo "        $PROG /backup/myborg-repo root@server.org\\"
+    echo "              -x /etc/borg/client-full.cfg \\"
+    echo "              -x /etc/borg/client-data.cfg \\"
     echo "              /etc /home /root /usr/local /var"
     echo
-    echo "  2. Push a backup of '/' to a local repository using the"
-    echo "     'client-full' exclude patterns:"
-    echo "        $PROG /backup/myborg-repo -x /etc/borg/client-full.cfg /"
+    echo "  2. Pull a backup of '/' from 'root@server.org' to a local"
+    echo "     repository using the 'client-full' exclude patterns:"
+    echo "        $PROG /backup/myborg-repo root@server.org \\"
+    echo "              -x /etc/borg/client-full.cfg /"
     exit 0
 }
 
