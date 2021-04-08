@@ -5,6 +5,7 @@
 # author: Albert Weichselbraun
 #
 
+echo "$*"
 PROG=$(basename "$0")
 
 help() {
@@ -49,7 +50,7 @@ do
        fi
 
        while read -r pattern; do
-          exclude+=("--exclude $pattern")
+          exclude+=("--exclude \"$pattern\"")
        done < <(sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$OPTARG")
        ;;
     ?) help
