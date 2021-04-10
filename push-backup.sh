@@ -33,14 +33,13 @@ if [ "$#" -lt 2 ]; then
     help
 fi
 
-BORG_OPTS="--stats --compression zstd,9 --exclude-caches --noatime --progress"
+BORG_OPTS=("create" "--stats" "--compression" "zstd,9" "--exclude-caches" "--noatime" "--progress")
 BORG_REPOSITORY=$1
 shift
 HOST=$(hostname -f)
 DATE=$(date --iso-8601)
 
 # create exclude parameter
-exclude=()
 while getopts x: opt 
 do
     case $opt in
@@ -50,7 +49,8 @@ do
        fi
 
        while read -r pattern; do
-          exclude+=("--exclude \"$pattern\"")
+          BORG_OPTS+=("--exclude")
+          BORG_OPTS+=("$pattern")
        done < <(sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$OPTARG")
        ;;
     ?) help
@@ -59,26 +59,7 @@ do
 done;
 shift $((OPTIND-1))
 
+BORG_OPTS+=("$BORG_REPOSITORY::$HOST.$DATE" $@)
+
 echo "Creating backup $HOST.$DATE."
-borg create ${BORG_OPTS}  \
-   --exclude pp:/dev \
-   --exclude pp:/lost+found \
-   --exclude pp:/media\
-   --exclude pp:/mnt \
-   --exclude pp:/proc \
-   --exclude pp:/run \
-   --exclude pp:/snap \
-   --exclude pp:/sys \
-   --exclude pp:/tmp \
-   --exclude pp:/var/cache \
-   --exclude pp:/var/crash \
-   --exclude pp:/var/lib/apt \
-   --exclude pp:/var/lib/docker \
-   --exclude pp:/var/lib/flatpak \
-   --exclude pp:/var/lib/snapd \
-   --exclude pp:/var/lock \
-   --exclude pp:/var/log \
-   --exclude pp:/var/run \
-   --exclude pp:/var/snap \
-   --exclude pp:/var/tmp \
-   ${exclude[@]} $BORG_REPOSITORY::$HOST.$DATE $*
+borg "${BORG_OPTS[@]}"
