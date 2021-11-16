@@ -19,14 +19,14 @@ help() {
     echo "  1. Pull a backup of '/etc', '/home', '/root', '/usr/local' and"
     echo "     '/var' from 'root@server.org' to the local repository applying"
     echo "     the 'client-full' and 'client-data' exclude patterns:"
-    echo "        $PROG /backup/myborg-repo root@server.org\\"
+    echo "        $PROG root@server.org /backup/myborg-repo \\"
     echo "              -x /etc/borg/client-full.cfg \\"
     echo "              -x /etc/borg/client-data.cfg \\"
     echo "              /etc /home /root /usr/local /var"
     echo
     echo "  2. Pull a backup of '/' from 'root@server.org' to a local"
     echo "     repository using the 'client-full' exclude patterns:"
-    echo "        $PROG /backup/myborg-repo root@server.org \\"
+    echo "        $PROG root@server.org /backup/myborg-repo \\"
     echo "              -x /etc/borg/client-full.cfg /"
     exit 0
 }
