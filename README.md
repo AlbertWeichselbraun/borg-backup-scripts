@@ -35,8 +35,7 @@ Examples:
 Pull backups are initiated by the backup server rather than the client. 
 
 ### Requirements:
-- BorgBackup, `socat`, `psmisc` and the `uuid-runtime` must be installed on both machines
-- Debian/Ubuntu:
+- `BorgBackup`, `socat`, `psmisc` and the `uuid-runtime` must be installed on both machines
   ```bash
   apt install borgbackup socat psmisc uuid-runtime
   ``` 
