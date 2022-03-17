@@ -46,7 +46,9 @@ Usage: pull-backup.sh [USER@]HOST REPOSITORY [-x EXCLUDE_PATTERN_FILE] PATH
 
   [USER@]HOST           host and optional username of the host to backup
   REPOSITORY            the local or remote repository path
-  EXCLUDE_PATTERN_FILE  optional files containing exclude pattern(s) to apply
+  BIN_PATH              optional path of the directory holding the borg and socat binaries (default: /usr/bin)"
+  EXCLUDE_PATTERN_FILE  optional files containing exclude pattern(s) to apply"
+  REMOTE_SOCKET_DIR     optional path to the directory in which the remote socket shell be created (default: /root)"
   PATH                  paths to backup
 
 Examples:
