@@ -33,7 +33,7 @@ if [ "$#" -lt 2 ]; then
     help
 fi
 
-BORG_OPTS=("create" "--stats" "--compression" "zstd,9" "--exclude-caches" "--noatime" "--progress")
+BORG_OPTS=("create" "--stats" "--compression" "zstd,9" "--exclude-caches" "--progress")
 BORG_REPOSITORY=$1
 shift
 HOST=$(hostname -f)

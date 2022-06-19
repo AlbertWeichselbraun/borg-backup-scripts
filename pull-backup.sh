@@ -7,7 +7,7 @@
 
 PROG=$(basename "$0")
 BIN_DIR="/usr/bin"
-BORG_OPTS="--stats --compression zstd,9 --exclude-caches --noatime --progress"
+BORG_OPTS="--stats --compression zstd,9 --exclude-caches --progress"
 SOCKET_DIR=$HOME
 BORG_SOCKET=.borg-$(uuidgen --random).sock
 DATE=$(date --iso-8601)
