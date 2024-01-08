@@ -63,3 +63,6 @@ BORG_OPTS+=("$BORG_REPOSITORY::$HOST.$DATE" $@)
 
 echo "Creating backup $HOST.$DATE."
 borg "${BORG_OPTS[@]}"
+
+# return the borg exit code
+exit $? 
